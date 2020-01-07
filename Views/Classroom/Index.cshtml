@@ -1,0 +1,40 @@
+﻿@model IEnumerable<ClassroomVM>
+@{
+    //ViewData["Title"] = "Home Page";
+
+}
+<style type="text/css">
+    .cursor {
+        cursor: pointer;
+    }
+</style>
+<link rel="stylesheet" href="~/lib/cropperjs/cropper.min.css" />
+<main class="content-wrapper" asp-area="">
+    <section class="dashboard">
+        <div id="messageholder" style="display:none">
+        </div>
+        <div class="classroom section" >
+            <h3>Classrooms</h3>
+        </div>
+        <div class="guardian section ">
+            <h3><a href="/GuardianList">Guardians</a></h3>
+        </div>
+        <div class="child section ">
+            <h3><a href="/StudentList">Children</a></h3>
+        </div>
+        <div class="report section ">
+            <h3><a href="/Reports">Reports</a></h3>
+        </div>
+    </section>
+    <section class="teachers" style="display: none; width: 50%; margin: auto;">
+        <h4 class="blue">Please select a classroom</h4>
+        <partial name="_TeacherList" />
+    </section>
+</main>
+@section Scripts {
+    <script type="text/javascript">
+        $('.classroom').on('click', function () {
+            $('.teachers').fadeIn('slow');
+        });
+    </script>
+}

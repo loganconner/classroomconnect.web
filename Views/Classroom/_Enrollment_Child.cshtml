@@ -1,0 +1,81 @@
+﻿@model ClassroomConnect.Web.Models.ViewModels.EnrollmentRecordVM
+    
+    
+    <div id="enrollment-child" class="enrollment-section">
+        <div class="student">
+            <div class="section-head">
+                <h4 class="coral fancy"><span>Student</span></h4>
+            </div>
+            <div style="clear: right;" class="w-35">
+                <div class="circle-img" id="circleImg">
+                    <!-- User Profile Image -->
+                    <img id="profile-pic" class="profile-pic" src="@(Model.Child.ImageUrl)">
+                </div>
+                <div class="p-image">
+                    <i class="fa fa-camera upload-button"></i>
+                    <input class="file-upload" type="file" accept="image/*" id="Image" />
+                </div>
+            </div>
+            <div class="w-65 data-table">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                @if (Model.Child.FamilyId != null)
+                {
+                    <input type="hidden" asp-for="Child.FamilyId" />
+                }
+                @if (Model.Child.ChildId != null)
+                {
+                    <input type="hidden" asp-for="Child.ChildId" />
+                }
+                @if (Model.Child != null)
+                {
+                    <input type="hidden" asp-for="Child.ClassroomId" />
+                }
+                <input type="hidden" asp-for="Child.ImageUrl" />
+                <div class="float-container top left right" style="clear: both;">
+                    <label asp-for="Child.FirstName"></label>
+                    <input asp-for="Child.FirstName" data-placeholder="" />
+                    <span asp-validation-for="Child.FirstName" class="text-danger"></span>
+                </div>
+                <div class="float-container top left right">
+                    <label asp-for="Child.MiddleName" class=""></label>
+                    <input asp-for="Child.MiddleName" data-placeholder="" />
+                    <span asp-validation-for="Child.MiddleName" class="text-danger"></span>
+                </div>
+                <div class="float-container top left right">
+                    <label asp-for="Child.LastName" class=""></label>
+                    <input asp-for="Child.LastName" data-placeholder="" />
+                    <span asp-validation-for="Child.LastName" class="text-danger"></span>
+                </div>
+                <div class="float-container top left right bottom">
+                    <label asp-for="Child.DOB" class=""></label>
+                    <input asp-for="Child.DOB" type="text" class="date-mask" data-placeholder="" />
+                    <span asp-validation-for="Child.DOB" class="text-danger"></span>
+                </div>
+
+
+            </div>
+        </div>
+        <div class="allergies">
+            <div class="section-head">
+                <h4 class="coral fancy"><span>Allergies</span></h4><button type="button" id="child-update" class="save-child btn btn-coral btn-shadow save-record" style="display: none">Save</button>
+            </div>
+            
+            <div class="data-table">
+                @if (Model.Child.Allergies != null && Model.Child.Allergies.Count() > 0)
+                {
+                    <div id="allergyList" class="list-group">
+
+                        @foreach (var a in Model.Child.Allergies)
+                        {
+                            <button type="button" class="allergy-btn btn-blue-inverted btn-shadow" value="@a.AllergyId">@a.Name <i class="far fa-times-circle fa-lg  pull-right " style="vertical-align: middle;"></i></button>
+                        }
+
+                    </div>
+                }
+                <div margin-top: 10px; margin-right: 5px; float: left; clear: right;">
+                    <button type="button" class="btn btn-blue btn-shadow create-allergy"><i class="fa fa-plus"></i> New Allergy</button>
+                </div>
+            </div>
+        </div>
+        </div>

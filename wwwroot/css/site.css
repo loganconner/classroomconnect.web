@@ -1,0 +1,657 @@
+﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification\ 
+for details on configuring this project to bundle and minify static web assets. */
+@font-face {
+    font-family: 'EBGaramond';
+    src: url('../fonts/EBGaramond-Regular.ttf');
+}
+@font-face {
+    font-family: 'Quicksand';
+    src: url('../fonts/Quicksand-Regular.ttf');
+}
+body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+    color: #5e5e5e;
+    font-family: Quicksand;
+    text-transform: uppercase;
+}
+.data-table {
+    margin-bottom: 10px;
+    margin-top: 5px;
+}
+.dashboard {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    height: 400px;
+}
+
+.list-group button {
+    margin: 10px 5px;
+}
+.section {
+    width: 200px;
+    height: 200px;
+    background-color: #ff8e50;
+    color: #fff;
+    text-transform: uppercase;
+    border-radius: 50%;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease 0s;
+    cursor: pointer;
+    text-align: center;
+    position: relative;
+}
+    .section:hover {
+        background-color: #fff;
+        color: #ff8e50 !important;
+        border: 2pt solid #ff8e50;
+        box-shadow: 0px 15px 20px rgba(255, 142, 80, 0.5);
+        transform: translateY(-3px);
+    }
+
+    .section a {
+        color: inherit;
+    }
+
+        .classroom:hover::after {
+            content: "Select from a list of Teachers";
+            display: block;
+            height: 25px;
+            width: 100%;
+            position: absolute;
+            bottom: -50px; 
+        }
+
+         .guardian:hover::after {
+            content: "View a list of Guardian records";
+            display: block;
+            height: 25px;
+            width: 100%;
+            position: absolute;
+            bottom: -50px; 
+        }
+
+         .child:hover::after {
+            content: "View a list of Child records";
+            display: block;
+            height: 25px;
+            width: 100%;
+            position: absolute;
+            bottom: -50px; 
+        }
+
+         .report:hover::after {
+            content: "View a list of available reports";
+            display: block;
+            height: 25px;
+            width: 100%;
+            position: absolute;
+            bottom: -50px; 
+        }
+
+    .section a:hover, .section a:focus {
+        color: #ff8e50 !important;
+        text-decoration: none;
+    }
+
+        .section a:visited, .section a:active {
+            color: #ff8e50 !;
+            text-decoration: none;
+        }
+    .section h3 {
+        margin: 0;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+#messageholder.error-message {
+    color: #8a1f11;
+    background-color: #FBE3E4;
+    border-color: #8a1f11;
+}
+
+#messageholder.success-message {
+    color: #1E621A !important;
+    border-color: #7AC475;
+    background-color: #D0F9CD;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none !important;
+    margin: 0 !important;
+}
+.checkboxes {
+    font-size: .65em;
+    display: inline-block;
+}
+.chkbox {
+    padding-left: 10px;
+    padding-bottom: 5px;
+    vertical-align: middle;
+}
+.checkboxes input:last-of-type {
+    margin-left: 10px;
+}
+
+.ui-tabs .ui-tabs-nav li.ui-tabs-active {
+    outline: none !important;
+    text-decoration: none !important;
+}
+
+.ui-widget input {
+    font-family:  'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    color: #5e5e5e;
+}
+
+.ui-widget-header {
+    border: none !important;
+    background: none !important;
+    color: #ff8e50;
+    font-weight: bold;
+    outline: none !important;
+    font-family: Quicksand !important;
+}
+
+    .ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default, .ui-button, html .ui-button.ui-state-disabled:hover, html .ui-button.ui-state-disabled:active {
+        border: none !important;
+        background: none !important;
+        /* background: #e6e6e6 url(images/ui-bg_glass_75_e6e6e6_1x400.png) 50% 50% repeat-x; */
+        font-weight: normal;
+        color: #555555;
+        outline: none !important;
+        .navbar-header a {
+    color: #50c1ff;
+
+    }
+}
+.ui-state-focus:focus, .ui-state-active a:focus , .ui-tabs-tab a:focus  {
+    outline: none !important ;
+        
+}
+
+
+.ui-state-active a {
+    border-bottom: 3pt solid #ff8e50 !important;
+}
+.navbar-header a:hover {
+    color: #50c1ff;
+}
+
+.navbar li a {
+    color: #4d4d4d;
+}
+
+.navbar li a:hover {
+    background-color: transparent !important;
+    color: #7d7d7d;
+}
+.body-content {
+    margin-top: 50px !important;
+}
+.navbar-fixed-top {
+    top: 5px !important;
+}
+.navbar .brand-title {
+    font-family: 'Quicksand';
+    font-size: 26px !important;
+}
+
+.enrollment-section {
+    width: 98%;
+    margin: 10px;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease 0s;
+    float: left;
+    padding: 5px 7px;
+    border: 1px solid #dcdcdc;
+}
+
+.form-group {
+    overflow-x: visible !important; 
+}
+
+.blue {
+    color: #50c1ff;
+}
+
+.coral {
+    color: #ff8e50;
+}
+
+.fa-lg {
+    line-height: 1 !important;
+}
+
+.side-by-side {
+    display: inline-flex;
+    width: 100%;
+}
+
+.next-to {
+    width: 50%;
+}
+
+.btn-shadow {
+    background-color: #fff;
+    width: auto;
+    height: 35px;
+    text-transform: uppercase;
+    border-radius: 10px;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease 0s;
+    cursor: pointer;
+    outline: none !important;
+}
+
+    .btn-shadow:hover {
+        color: #fff;
+        transform: translateY(-3px);
+    }
+
+.btn-blue-inverted {
+    border: 2px solid #50c1ff;
+    color: #50c1ff;
+    background-color: #fff;
+}
+
+    .btn-blue-inverted:hover {
+        background-color: #fff;
+        border: 2px solid #fff;
+        color: #50c1ff;
+        box-shadow: 0px 15px 20px rgba(80, 193, 255, 0.4);
+    }
+
+.btn-blue {
+    border: 1pt solid #50c1ff;
+    background-color: #50c1ff;
+    color: #fff;
+}
+
+    .btn-blue:hover {
+        background-color: #fff !important;
+        box-shadow: 0px 15px 20px rgba( 80, 193, 255, 0.4) !important;
+        color: #50c1ff;
+    }
+
+.btn-coral-inverted {
+    border: 1pt solid #ff8e50;
+    color: #ff8e50;
+    background-color: #fff;
+}
+
+.btn-coral-inverted:hover {
+    background-color: #fff;
+    border: 1pt solid #fff;
+    color: #ff8e50;
+    box-shadow: 0px 15px 20px rgba(255, 142, 80, 0.4);
+}
+
+.btn-coral {
+    border: 1pt solid #ff8e50;
+    color: #fff;
+    background-color: #ff8e50;
+}
+
+    .btn-coral:hover {
+        background-color: #fff;
+        color: #ff8e50;
+        box-shadow: 0px 15px 20px rgba(255, 142, 80, 0.4);
+    }
+
+/*#enrollment-dialog {
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+    outline: none;
+    padding: 10px 15px;
+}*/
+/* Wrapping element */
+/* Set some basic padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.allergy-btn {
+    padding: 6px 12px;
+    min-width: 125px !important;
+}
+
+/* Carousel */
+.carousel-caption p {
+    font-size: 20px;
+    line-height: 1.4;
+}
+
+/* Make .svg files in the carousel display properly in older browsers */
+.carousel-inner .item img[src$=".svg"] {
+    width: 100%;
+}
+
+/* QR code generator */
+#qrCode {
+    margin: 15px;
+}
+.editBlock > span, .editBlock > dl {
+    width: 90%;
+    float: left;
+}
+.editBlock {
+    width: 100%;
+    padding: 6px 12px;
+}
+.editBlock a {
+    float: right;
+    position: relative;
+}
+hr {
+    font-weight: 600;
+}
+label {
+    font-weight: 600 !important;
+}
+#searchLabel {
+    margin-top: 7px;
+}
+.checkbox-align {
+    padding: 0 !important;
+    margin: 0 !important;
+    vertical-align: middle !important;
+    position: relative !important;
+    top: -1px !important;
+    *overflow: hidden !important;
+}
+.student-name {
+    font-family: 'Georgia', serif;
+    font-weight: 600;
+}
+fieldset {
+    padding-bottom: 10px;
+}
+dt {
+    text-align: left !important;
+}
+tr.edit-row:hover {
+    background-color: whitesmoke;
+    cursor: pointer;
+}
+#details dt {
+    font-weight: 600;
+    color: #5e5e5e;
+    font-family: 'Georgia', serif;
+}
+#details dd {
+    margin-bottom: 7px;
+}
+hr {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.btn-light {
+    background-color: whitesmoke;
+    border-color: #dcdcdc;
+}
+.btn-light:hover {
+    background-color: #c4c4c4;
+    border-color: #ababab;
+}
+.form-group {
+    margin-bottom: 5px !important;
+    margin-bottom: 5px !important;
+    overflow-x: hidden;
+}
+#dialog-form {
+    margin: 0 auto !important;
+    height: auto !important;
+    
+}
+.detail-list {
+    margin-top: 25px;
+}
+.profile-pic {
+    max-width: 200px;
+    max-height: 200px;
+    display: block;
+    position: relative;
+    right: 10px;
+    bottom: 10px;
+}
+.footer {
+    position: fixed !important;
+    bottom: 10px !important;
+    text-align: center !important;
+    margin-top: 20px;
+
+}
+
+.float-container {
+    padding: 0 8px;
+    position: relative;
+}
+
+    .float-container input, .float-container select {
+        border: none;
+        font-size: 18px;
+        color: #5e5e5e;
+        margin: 15px 0 5px;
+        outline: 0;
+        width: 100% !important;
+    }
+
+    .float-container label {
+        font-size: 14px;
+        font-weight: normal !important;
+        position: absolute;
+        transform-origin: top left;
+        transform: translate(0, 16px) scale(1);
+        transition: all .1s ease-in-out;
+        color: #c3c3c3;
+    }
+
+    .float-container.active label {
+        transform: translate(0, 4px) scale(.75);
+        color: #50c1ff !important;
+    }
+
+.top {
+    border-top: solid 1px #ccc;
+}
+
+.bottom {
+    border-bottom: solid 1px #ccc;
+}
+
+.left {
+    border-left: solid 1px #ccc;
+}
+
+.right {
+    border-right: solid 1px #ccc;
+}
+
+
+
+#enrollment-tabs ul {
+    width: 100%;
+}
+
+#allergy-dialog-body {
+    padding: 10px;
+}
+
+#newAllergyList {
+    margin: 10px auto;
+    float: left;
+    clear: both;
+}
+
+
+#guardian-dialog {
+    margin: 15px 0 15px 0;
+}
+
+.ui-widget.ui-widget-content {
+    border: none !important;
+}
+
+.ui-widget {
+    font-family: Quicksand;
+}
+
+.file-upload {
+    display: none !important;
+}
+
+.section-head {
+    text-align: center;
+    margin: 7px 0;
+}
+
+.student, .allergies {
+    width: 50%;
+    float: left;
+}
+
+.save-record {
+    float: right;
+    margin-right: 15px;
+    position: relative;
+    top: 25px;
+    right: 15px;
+}
+
+.fancy {
+    line-height: 0.5;
+    text-align: center;
+    margin-right: 5px;
+    display: inline-block;
+}
+
+.fancy span {
+    display: inline-block;
+    position: relative;
+}
+    .fancy span:before,
+    .fancy span:after {
+        content: "";
+        position: absolute;
+        height: 5px;
+        border-bottom: 1px solid #ff8e50;
+        top: 25%;
+        width: 100px;
+    }
+
+    .fancy span:before {
+        right: 100%;
+        margin-right: 15px;
+    }
+
+    .fancy span:after {
+        left: 100%;
+        margin-left: 15px;
+    }
+
+div.circle-img {
+    border-radius: 1000px !important;
+    overflow: hidden !important;
+    width: 190px !important;
+    height: 190px !important;
+    border: 3px solid #ff8e50 !important;
+    position: absolute !important;
+    top: 5px !important;
+}
+.w-35 {
+    width: 35%;
+    position: relative;
+    min-height: 1px;
+    padding-right: 15px;
+    padding-left: 15px;
+    float: left;
+}
+
+.w-65 {
+    width: 65%;
+    position: relative;
+    min-height: 1px;
+    padding-right: 15px;
+    padding-left: 15px;
+    float: left;
+}
+
+.w-44 {
+    width: 44%;
+    position: relative;
+    min-height: 1px;
+    padding-right: 15px;
+    padding-left: 15px;
+    float: left;
+}
+
+.ui-dialog .ui-dialog-title {
+    font-size: 1.25em !important;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+.p-image {
+    position: absolute !important;
+    top: 170px !important;
+    right: 50px !important;
+    color: #666666 !important;
+    transition: all .3s cubic-bezier(.175, .885, .32, 1.275) !important;
+}
+
+    .p-image:hover {
+        transition: all .3s cubic-bezier(.175, .885, .32, 1.275);
+    }
+
+.cropper-crop-box, .cropper-view-box {
+    border-radius: 50% !important;
+}
+
+.cropper-view-box {
+    box-shadow: 0 0 0 1px #39f;
+    outline: 0;
+}
+
+.upload-button {
+    font-size: 1.2em;
+}
+
+    .upload-button:hover {
+        transition: all .3s cubic-bezier(.175, .885, .32, 1.275);
+        color: #999;
+
+
+        @media (min-width: 992px) {
+            .footer {
+                width: 970px;
+            }
+        }
+
+        @media screen and (min-width: 1200px) {
+            .footer {
+                width: 1170px;
+            }
+        }
+        /* Hide/rearrange for smaller screens */
+        @media screen and (max-width: 767px) {
+            /* Hide captions */
+            .carousel-caption {
+                display: none;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .footer {
+                width: 750px;
+            }
+        }
+
+

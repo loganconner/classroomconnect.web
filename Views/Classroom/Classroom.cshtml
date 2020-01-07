@@ -1,0 +1,664 @@
+﻿@model ClassroomVM
+@{
+    //ViewData["Title"] = "Home Page";
+    
+}
+<style type="text/css">
+    .cursor {
+        cursor: pointer;
+    }
+
+    .ui-dialog .ui-dialog-content, .ui-tabs {
+        padding: 0;
+    }
+
+    /*.ui-dialog-titlebar {
+        display: none;
+    }*/
+
+    #enrollment-dialog {
+        border: 0;
+    }
+
+    #ui-tab-dialog-close {
+        position: absolute;
+        right: 0;
+        top: 23px;
+    }
+
+        #ui-tab-dialog-close a {
+            float: none;
+            padding: 0;
+        }
+</style>
+<link rel="stylesheet" href="~/lib/cropperjs/cropper.min.css" />
+<link rel="stylesheet" href="~/css/MultiStep.css" />
+<link rel="stylesheet" href="~/css/MultiStep-theme.css" />
+<main class="content-wrapper" asp-area="">
+    <div id="messageholder" style="display:none">
+    </div>
+    <div id="dialog0" title="Upload Picture" style="display: none">
+        <partial name="_PhotoUploader" />
+    </div>
+    <div class="form-group row">
+        <div class="col-md-6"><button id="create-user" class="btn btn-blue btn-shadow" data-classid="@Model.ClassroomId.ToString()"><i class="fa fa-plus"></i> Add New Student</button></div>
+        <div class="col-md-6">
+            <div class="col-md-6 col-md-push-4">
+                <div class="input-group">
+                    <input type="text" id="search" name="SearchString" class="form-control">
+                    <span class="input-group-addon" style="background-color: transparent; border-left: none;">
+                        <i class="fa fa-search blue"></i>
+                    </span>
+                </div>
+            </div>
+            <div class="col-md-2 pull-right">
+                <input type="button" value="Filter" class="btn btn-coral btn-shadow" id="filter" />
+            </div>
+        </div>
+    </div>
+    <h3>@Model.TeacherName </h3>
+    <span style="font-size: .8em;">Student Count: @Model.Students.Count()</span>
+    <section class="detail-list">
+        <partial name="_StudentList" />
+        <div id="enrollment-dialog" class="ui-widget">
+            <form id="enrollment-modal-body" class="ui-widget ui-content"></form>
+        </div>
+        <div id="guardian-dialog" class="ui-widget">
+            <form id="guardian-modal-body" class="ui-widget ui-content"></form>
+        </div>
+        <div id="allergy-dialog" class="ui-widget">
+            <div id="allergy-dialog-body" style="display: none;">
+                <div class="center-block">
+                    <div class="col-md-8 ">
+                        <div class="float-container top left right bottom">
+                            <label for="newAllergy" class="label">Allergy Name</label>
+                            <input type="text" id="newAllergy" data-placeholder="" />
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div style="margin-top: 10px; margin-right: 5px; float: left; clear: right;">
+                            <button type="button" class="btn btn-blue btn-shadow add-allergy"><i class="fa fa-plus"></i> Add Allergy</button>
+                        </div>
+                    </div>
+                </div>
+                <div id="newAllergyList" class="list-group">
+
+                </div>
+            </div>
+        </div>
+    </section>
+    <div id="dialog-form" title="Guardian Search" style="display:none; ">
+        <fieldset style="margin-top:10px; text-align:center">
+            <button class="btn btn-blue btn-shadow" name="existingGuardian" id="existingYes">Yes</button>
+            <button class="btn btn-coral btn-shadow" name="existingGuardian" id="existingNo">No</button>
+        </fieldset>
+    </div>
+</main>
+@section Scripts {
+    <script src="~/js/jquery.blockUI.js"></script>
+    <script src="~/js/exif.js"></script>
+    <script src="~/js/exifreader.js"></script>
+    <script src="~/js/binaryajax.js"></script>
+    <script src="~/lib/cropperjs/cropper.js"></script>
+    <script src="~/lib/js/MultiStep.js"></script>
+    <script src="~/js/jquery.mask.js"></script>
+    <script type="text/javascript">
+
+        var FloatLabel = (() => {
+
+                // add active class
+                var handleFocus = (e) => {
+                    var target = e.target;
+                    target.parentNode.classList.add('active');
+                    target.setAttribute('placeholder', target.getAttribute('data-placeholder'));
+                };
+
+                // remove active class
+                var handleBlur = (e) => {
+                    var target = e.target;
+                    if (!target.value) {
+                        target.parentNode.classList.remove('active');
+                    }
+                    target.removeAttribute('placeholder');
+                };
+
+                // register events
+                var bindEvents = (element) => {
+                    var floatField = element.querySelector('input');
+                    floatField.addEventListener('focus', handleFocus);
+                    floatField.addEventListener('blur', handleBlur);
+                };
+
+                // get DOM elements
+                var init = () => {
+                    var floatContainers = document.querySelectorAll('.float-container');
+
+                    floatContainers.forEach((element) => {
+
+                        if (element.querySelector('input').value) {
+                            element.classList.add('active');
+                        }
+
+                        bindEvents(element);
+                    });
+                };
+
+                return {
+                    init: init
+                };
+        })();
+
+    $(document.body).on("click", "#existingYes", function () {
+        $(".ui-dialog-title").html("Please Enter The Primary Guardian's Last Name:");
+        $("#dialog-form").html('<fieldset style="margin-top:10px; text-align:center" class="form-group"><div class="col-md-8"><input type="text" name="guardianSearch" id="guardianSearch" class="form-control"></div><div class="col-md-1"><input type="button" id="getGuardian" value="Search" class="btn btn-blue btn-shadow" /></div></fieldset><hr /><ul id="guardianResult" style="list-style: none;"></ul>');
+    });
+    $(document.body).on("click", "#existingNo", function () {
+        newFamily();
+        $("#dialog-form").dialog("destroy");
+    });
+
+    function newFamily() {
+        var urlPath = '@Url.Action("NewFamilyRecord", "Classroom")';
+        $.blockUI({ message: '<h5 style="text-transform: capitalize;">Starting New Family Record...</h5>' });
+        $.ajax({
+            url: urlPath,
+            success: function (result) {
+                var body = result;
+                $.unblockUI();
+                $("#guardian-modal-body").html(body);
+                ShowGuardianDialog(body);
+            }
+        });
+    }
+
+    $(document.body).on('click', '#child-save', function () {
+            $('enrollment-modal-body').children().find('.date-mask').unmask();
+            $('enrollment-modal-body').children().find('.phone').unmask();
+            $('#Child_ClassroomId').val("@Model.ClassroomId.ToString()");
+        var form = $('#enrollment-modal-body').serialize();
+        $.blockUI({ message: '<h5 style="text-transform: capitalize;">Adding New Child Record...</h5>' });
+            $.ajax({
+                type: "POST",
+                contentType: 'application/x-www-form-urlencoded; charset=utf-8',
+                dataType: "html",
+                url: "@Url.Action("NewChildRecord","Classroom")",
+                data: form,
+                success: function (result) {
+                    var body = result;
+                    $.unblockUI();                    
+                    $("#enrollment-modal-body").html(body);
+                    //$("#enrollment-dialog").dialog("destroy");
+                    ShowContactDialog(body);
+                }
+            });
+    });
+
+    $(document.body).on('click', '#child-update', function () {
+        $('enrollment-modal-body').children().find('.date-mask').unmask();
+        $('enrollment-modal-body').children().find('.phone').unmask();
+    var form = $('#enrollment-modal-body').serialize();
+    $.blockUI({ message: '<h5 style="text-transform: capitalize;">Updating Child Record...</h5>' });
+        $.ajax({
+            type: "PUT",
+            dataType: 'json',
+            contentType: 'application/x-www-form-urlencoded; charset=utf-8',
+            url: "@Url.Action("UpdateChild","Classroom")",
+            data: form,
+            success: function (result) {
+                var ajaxreturn = result;
+                $('#child-update').parents('.ui-dialog').find('.ui-dialog-title').html(result.ReturnObject.FirstName + " " + result.ReturnObject.MiddleName + " " + result.ReturnObject.LastName);
+                ShowMessage(ajaxreturn, true);
+                return ajaxreturn.Message; 
+            }
+        });
+    });
+
+    $(document.body).on('click', '#contact-update', function () {
+        $('enrollment-modal-body').children().find('.date-mask').unmask();
+        $('enrollment-modal-body').children().find('.phone').unmask();
+    var form = $('#enrollment-modal-body').serialize();
+    $.blockUI({ message: '<h5 style="text-transform: capitalize;">Updating Contact Record...</h5>' });
+        $.ajax({
+            type: "PUT",
+            dataType: 'json',
+            contentType: 'application/x-www-form-urlencoded; charset=utf-8',
+            url: "@Url.Action("UpdateContacts","Classroom")",
+            data: form,
+            success: function (result) {
+                var ajaxreturn = result;               
+                ShowMessage(ajaxreturn, true);
+                return ajaxreturn.Message; 
+            }
+        });
+    });
+
+    $(document.body).on('click', '#guardian-save', function () {
+            $('guardian-modal-body').children().find('.date-mask').unmask();
+            $('guardian-modal-body').children().find('.phone').unmask();
+            if ($('#primWorkPh').is(':hidden')) {
+                $('#primWorkPh').html('');
+            }
+            if ($('#secWorkPh').is(':hidden')) {
+                $('#secWorkPh').html('');
+            }
+            if ($('#primWorkAddr').is(':hidden')) {
+                console.log('here');
+                $('#primWorkAddr').html('');
+            }
+            if ($('#secWorkAddr').is(':hidden')) {
+                $('#secWorkAddr').html('');
+            }
+        var form = $('#guardian-modal-body').serialize();
+        $.blockUI({ message: '<h5 style="text-transform: capitalize;">Adding New Guardian Record...</h5>' });
+            $.ajax({
+                type: "POST",
+                contentType: 'application/x-www-form-urlencoded; charset=utf-8',
+                dataType: "html",
+                url: "@Url.Action("NewGuardianRecord","Classroom")",
+                data: form,
+                success: function (result) {
+                    var body = result;
+                    $.unblockUI();   
+                    $("#guardian-dialog").dialog("destroy");
+                    $("#enrollment-modal-body").html(body);
+                    
+                    ShowChildDialog(body);
+                }
+            });
+        });
+
+        $(document.body).on('change', '.student input', function () {
+            $("#child-update").fadeIn('slow');
+        });
+
+        $(document.body).on('change', '.contact input', function () {
+            $("#contact-update").fadeIn('slow');
+        });
+
+        $(document.body).on('click', '.create-allergy', function () {
+            addAllergyDialog();
+        });
+
+        $(document.body).on('click', '.add-allergy', function () {
+            $('#newAllergyList').append('<button type="button" class="allergy-btn btn-blue-inverted btn-shadow" value="' + $('#newAllergy').val() + '">' + $('#newAllergy').val() + '<i class="far fa-times-circle fa-lg  pull-right " style="vertical-align: middle;"></i></button>');
+            $('#newAllergy').val('');
+        });
+
+        function addAllergyDialog() {
+            $("#allergy-dialog").dialog({
+                    resizable: false,
+                    modal: true,
+                    height: "auto",
+                    width: "50%",
+                    title: "New Allergy",
+                    position: {my: 'center top+70%', at: 'center top'},
+                    cache: false,
+                    closeText: "",
+                    open: function () {
+                        $('#allergy-dialog-body').show();
+                        FloatLabel.init();
+                    },
+                    close: function () {
+                        refreshChildAllergies();
+                    }
+
+                });
+
+            $('#ui-tab-dialog-close').append($('a.ui-dialog-titlebar-close'));
+        }
+
+        function refreshChildAllergies() {
+            $('#newAllergyList').children('button').each(function () {
+                $('#allergyList').append($(this));
+            });
+        }
+
+        $(document.body).on('click', '#guardianResult li a', function () {
+            var familyId = $(this).parent('li').data('family');
+            newEnrollment(familyId);
+            $("#dialog-form").dialog("destroy");
+        });
+
+        function newEnrollment(familyId) {
+
+        var urlPath = '@Url.Action("NewChildRecord", "Classroom")';
+        $.blockUI({ message: '<h5 style="text-transform: capitalize;">Starting New Student Record...</h5>' });
+        $.ajax({
+            url: urlPath,
+            data: {
+                familyId: familyId
+            },
+            success: function (result) {
+                var body = result;
+                $.unblockUI();
+                $("#enrollment-modal-body").html(body);
+                ShowEnrollmentDialog(body);
+            }
+        });
+
+        }
+
+        function searchGuardian() {
+        var searchTerm = $('#guardianSearch').val();
+        $.ajax({
+            type: 'GET',
+            url: "@Url.Action("GuardianSearch", "Classroom")",
+            contenttype: "application/json; charset=utf-8",
+            data: {
+                searchString: searchTerm
+            },
+            success: function (data) {
+                if (data.length > 0) {
+                    for (var i = 0; i < data.length; i++) {
+                        if (data[i].isPrimaryGuardian == true) {
+                            $('#guardianResult').append('<li data-family="' + data[i].familyId + '"><a href="#" class="btn btn-link">' + data[i].firstName + ' ' + data[i].lastName + '</a><span class="badge badge-primary btn-blue">Primary</span></li>');
+                        }
+                        else
+                        {
+                            $('#guardianResult').append('<li data-family="' + data[i].familyId + '"><a href="#" class="btn btn-link">' + data[i].firstName + ' ' + data[i].lastName + '</a></li>');
+                        }
+
+                    }
+
+                } else {
+                    $('#guardianResult').append('<li><strong>No Results Found</strong></li>');
+                }
+            }
+        });
+    }
+
+        function getStudent(childId) {
+            var urlPath = '@Url.Action("EnrollmentRecord", "Classroom", new { id = "xvar" })';
+            $.blockUI({ message: '<h5 style="text-transform: capitalize;">Loading Student Record...</h5>' });
+            urlPath = urlPath.replace("xvar", childId);
+            $.ajax({
+                url: urlPath,
+                success: function (result) {
+                    var body = result;
+                    $.unblockUI();
+                    $("#enrollment-modal-body").html(body);
+                    ShowEnrollmentDialog(body);
+                }
+            });
+
+        }
+
+        function ShowMessage(ajaxreturn, showSuccess) {
+            $.blockUI({ message: '<h5 style="text-transform: capitalize;">' + ajaxreturn.Message + '!</h5>' });
+        setTimeout(function () { $.unblockUI(); }, 2500)
+        }
+
+        function ShowGuardianDialog(body) {
+                $("#guardian-dialog").dialog({
+                    resizable: false,
+                    modal: true,
+                    height: "auto",
+                    width: "50%",
+                    title: "New Guardian Record",
+                    position: {my: 'center top+10%', at: 'center top'},
+                    cache: false,
+                    closeText: "",
+                    open: function () {
+                        FloatLabel.init();
+                    },
+                    close: function () {
+                        $("#guardian-modal-body").html("");
+                        refreshStudentList();
+                    }
+
+                });
+
+            $('#ui-tab-dialog-close').append($('a.ui-dialog-titlebar-close'));
+
+        }
+
+        function ShowChildDialog(body) {
+                $("#enrollment-dialog").dialog({
+                    resizable: false,
+                    modal: true,
+                    height: "auto",
+                    width: "80%",
+                    title: "New Child Record",
+                    position: {my: 'center top+10%', at: 'center top'},
+                    cache: false,
+                    closeText: "",
+                    open: function () {
+                        FloatLabel.init();
+                    },
+                    close: function () {
+                        $("#enrollment-modal-body").html("");
+                        refreshStudentList();
+                    }
+
+                });
+
+            $('#ui-tab-dialog-close').append($('a.ui-dialog-titlebar-close'));
+
+        }
+
+        function ShowContactDialog(body) {
+                $("#enrollment-dialog").dialog({
+                    resizable: false,
+                    modal: true,
+                    height: "auto",
+                    width: "80%",
+                    title: "New Contact Record",
+                    position: {my: 'center top+10%', at: 'center top'},
+                    cache: false,
+                    closeText: "",
+                    open: function () {
+                        FloatLabel.init();
+                    },
+                    close: function () {
+                        $("#enrollment-modal-body").html("");
+                        refreshStudentList();
+                    }
+
+                });
+
+            $('#ui-tab-dialog-close').append($('a.ui-dialog-titlebar-close'));
+
+        }
+
+        function ShowEnrollmentDialog(body) {
+                //$('#enrollment-tabs').tabs();
+                $("#enrollment-dialog").dialog({
+                    resizable: false,
+                    modal: true,
+                    maxHeight: 800,
+                    width: "80%",
+                    title: "",
+                    position: {my: 'center top+10%', at: 'center top'},
+                    cache: false,
+                    closeText: "",
+                    open: function () {
+                        FloatLabel.init();
+                    },
+                    close: function () {
+                        $("#enrollment-modal-body").html("");
+                        refreshStudentList();
+                    }
+
+                });
+
+            $('#ui-tab-dialog-close').append($('a.ui-dialog-titlebar-close'));
+
+        }
+
+        function refreshStudentList() {
+            var classId = "@Model.ClassroomId.ToString()";
+            $.ajax({
+                type: "GET",
+                url: "@Url.Action("StudentList","Classroom")",
+                data: {classId : classId},
+                success: function (result) {
+                    return $(".detail-list").html(result);;
+                }
+            });
+        }
+
+        $('#create-user').on('mouseenter', function () {
+            $('.fa-plus').css("color", "#50c1ff");
+        }).on('mouseleave', function () {
+            $('.fa-plus').css("color", "#fff");
+        });
+
+
+
+
+        function base64ToArrayBuffer(base64) {
+            base64 = base64.replace(/^data\:([^\;]+)\;base64,/gmi, '');
+            var binary_string = window.atob(base64);
+            var len = binary_string.length;
+            var bytes = new Uint8Array(len);
+            for (var i = 0; i < len; i++) {
+                bytes[i] = binary_string.charCodeAt(i);
+            }
+            return bytes.buffer;
+        }
+
+        function isPortrait(img) {
+            var w = img.naturalWidth || img.width,
+                h = img.naturalHeight || img.height;
+            return (h > w);
+        }
+
+        var image;
+        var result;
+        var croppable;
+        var cropper;
+
+        function readImage(input) {
+            if (Modernizr.touch) {
+                BlockUI();
+            }
+            if (input.files && input.files[0]) {
+                var FR = new FileReader();
+                FR.onloadend = function (e) {
+
+                        $('#target').attr("src", e.target.result);
+                        image = document.getElementById('target');
+                        result = document.getElementById('circleImg');
+                        croppable = true;
+                        cropper = new Cropper( image,{
+                            aspectRatio: 1,
+                            viewMode: 1,
+                            cropBoxResizable: false,
+                            ready: function () {
+                                croppable = true;
+                            },
+                            data:{
+                                    width: 1600,
+                                    height:  1600,
+                                },
+                        });
+
+                        $("#upload-div").show();
+                };
+                FR.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function getRoundedCanvas(sourceCanvas) {
+            var canvas = document.createElement('canvas');
+          var context = canvas.getContext('2d');
+          var width = sourceCanvas.width;
+          var height = sourceCanvas.height;
+
+          canvas.width = width;
+          canvas.height = height;
+          context.imageSmoothingEnabled = true;
+          context.drawImage(sourceCanvas, 0, 0, width, height);
+          context.globalCompositeOperation = 'destination-in';
+          context.beginPath();
+          context.arc(width / 2, height / 2, Math.min(width, height) / 2, 0, 2 * Math.PI, true);
+          context.fill();
+          return canvas;
+        }
+
+        $(document).on('click', '.upload-button', function (e) {
+            if ($("#Child_FirstName").val() == "" || $("#Child_LastName").val() == "") {
+                alert("Please provide child's full name.");
+            } else {
+                $(".file-upload").val(null);
+                if (cropper != null) {
+                    cropper.destroy();
+                }
+                $(".file-upload").click();
+                imageType = $(".file-upload").attr('id');
+            }
+
+            //$("#target").attr('src', '');
+        });
+
+        $(document).on('click', '#cancel_upload', function (e) {
+            $("#target").attr('src', '');
+            $("#dialog0").dialog('close');
+
+        });
+        $(document).on('change', '.file-upload', function (e) {
+            readImage(this);
+            $("#target").attr('src', '');
+            $("#dialog0").dialog({ width: 900, minHeight: 450 });
+            $("#cancel_upload").show();
+        });
+
+        $(document).on('click', "#uploadpic", function () {
+            var croppedCanvas;
+            var roundedCanvas;
+            var roundedImage;
+
+            if (!croppable) {
+                return;
+            }
+
+            // Crop
+            croppedCanvas = cropper.getCroppedCanvas();
+
+            // Round
+            roundedCanvas = getRoundedCanvas(croppedCanvas);
+
+            // Show
+            if ($('#target').prop('src') != '') {
+                $("#dialog0").dialog('close');
+                BlockUI();
+
+                $('#target').attr('src', roundedCanvas.toDataURL());
+
+                $.unblockUI();
+                var childName = $('#Child_FirstName').val() + "_" + $('#Child_MiddleName').val() + "_" + $('#Child_LastName').val();
+                UploadPhoto($('#target').prop('src'), 0, 0, roundedCanvas.width, roundedCanvas.height, roundedCanvas.rotate, childName, false)
+                cropper.destroy();
+            }
+        });
+
+        function UploadPhoto(base64, x, y, w, h, rotate, childName, touch) {
+            //Sets x and y values to zero if negative
+            y = $.isNumeric(y) && y < 0 ? 0 : y;
+            x = $.isNumeric(x) && x < 0 ? 0 : x;
+            $.post("/Classroom/UploadPhoto", { Base64: base64, x: Math.floor(x), y: Math.floor(y), w: Math.floor(w), h: Math.floor(h), rotate: rotate, childName: childName , touch: touch })
+                .done(function (data) {
+                    $('.profile-pic').attr('src', "");
+                    $('#Child_ImageUrl').val(data);
+                    $('.profile-pic').attr('src', data);
+                }).always(function () {
+
+                });
+        }
+
+        function BlockUI() {
+            $.blockUI({
+                css: {
+                    border: 'none',
+                    padding: '0px',
+                    backgroundColor: '#000',
+                    '-webkit-border-radius': '10px',
+                    '-moz-border-radius': '10px',
+                    opacity: .9,
+                    color: '#fff'
+                }
+            });
+            }
+
+    </script>
+}

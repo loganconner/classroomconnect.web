@@ -1,0 +1,30 @@
+﻿@{
+    ViewBag.Title = "PhotoUploader";
+    Layout = null;
+
+}
+
+<link href="~/css/site.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+<br />
+
+<div id="imageContainer" style="height: 100%">
+    <div id="imageholder">
+        <img class="winktesting" id="target" height="650" />
+        <!--<img src="demo_files/sago.jpg" id="target" alt="[Jcrop Example]" />-->
+
+    </div>
+
+
+
+    <button style="font-size:20px" id="rotate_pic"> <i class="material-icons">rotate_right</i></button>
+
+    <button style="font-size:20px" id="zoomout"><i class="material-icons">zoom_out</i></button>
+
+    <button style="font-size:20px" id="zoomin"> <i class="material-icons">zoom_in</i></button>
+
+    <button style="font-size:20px;float:right" id="uploadpic"> Upload<i class="material-icons">file_upload</i></button>
+
+    <button style="font-size:20px;float:right;margin-right:5px" id="cancel_upload"> Cancel<i class="material-icons">cancel</i></button>
+</div>

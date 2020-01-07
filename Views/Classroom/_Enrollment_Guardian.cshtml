@@ -1,0 +1,299 @@
+﻿@model EnrollmentRecordVM
+
+    <div id="enrollment-guardian" class="enrollment-section">
+        <div class="section-head">
+            <h4 class="coral fancy"><span>Guardians</span></h4><button type="button" id="guardian-save" class="btn btn-coral btn-shadow save-record" style="display: none">Save</button>
+        </div>
+        <div class="col-md-6 data-table">
+            <div class="checkboxes">
+                <input type="checkbox" asp-for="PrimaryGuardian.IsPrimaryGuardian" />
+                <label for="PrimaryGuardian.IsGuardian" class="chkbox">Primary Guardian</label>
+            </div>
+            @if (Model.PrimaryGuardian != null)
+            {
+                <input type="hidden" asp-for="PrimaryGuardian.GuardianId" />
+            }
+            <input type="hidden" asp-for="PrimaryGuardian.FamilyId" />
+            <div class="side-by-side">
+                <div class="top left right float-container next-to">
+                    <label asp-for="PrimaryGuardian.FirstName" class=""></label>
+                    <input asp-for="PrimaryGuardian.FirstName" data-placeholder="" />
+                    <span asp-validation-for="PrimaryGuardian.FirstName" class="text-danger"></span>
+                </div>
+                <div class="top right float-container next-to">
+                    <label asp-for="PrimaryGuardian.LastName" class=""></label>
+                    <input asp-for="PrimaryGuardian.LastName" data-placeholder="" />
+                    <span asp-validation-for="PrimaryGuardian.LastName" class="text-danger"></span>
+                </div>
+            </div>
+            @if (Model.PrimaryGuardian.MobilePhone != null && Model.PrimaryGuardian.MobilePhone.PhoneId != Guid.Empty)
+            {
+                <input type="hidden" asp-for="PrimaryGuardian.MobilePhone.PhoneId" />
+                <input type="hidden" asp-for="PrimaryGuardian.MobilePhone.PhoneType" readonly />
+            }
+            else
+            {
+                <input type="hidden" asp-for="PrimaryGuardian.MobilePhone.PhoneType" value="Mobile" readonly />
+            }
+            <div class="side-by-side">
+                <div class="float-container top left right next-to">
+                    <label asp-for="PrimaryGuardian.DOB"></label>
+                    <input asp-for="PrimaryGuardian.DOB" type="text" class="date-mask" data-placeholder="" />
+                    <span asp-validation-for="PrimaryGuardian.DOB" class="text-danger"></span>
+                </div>
+                <div class="float-container top right next-to">
+                    <label asp-for="PrimaryGuardian.MobilePhone.PhoneNumber" class=""></label>
+                    <input asp-for="PrimaryGuardian.MobilePhone.PhoneNumber" class="phone" data-placeholder="" />
+                    <span asp-validation-for="PrimaryGuardian.MobilePhone.PhoneNumber" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="float-container top left right ">
+                <label asp-for="PrimaryGuardian.Email" class=""></label>
+                <input asp-for="PrimaryGuardian.Email" data-placeholder="" />
+                <span asp-validation-for="PrimaryGuardian.Email" class="text-danger"></span>
+            </div>
+
+            @if (Model.PrimaryGuardian.HomeAddress != null && Model.PrimaryGuardian.HomeAddress.AddressId != Guid.Empty)
+            {
+                <input type="hidden" asp-for="PrimaryGuardian.HomeAddress.AddressId" />
+                <input type="hidden" asp-for="PrimaryGuardian.HomeAddress.AddressType" readonly />
+            }
+            else
+            {
+                <input type="hidden" asp-for="PrimaryGuardian.HomeAddress.AddressType" value="Home" readonly />
+            }
+
+            <div class="float-container top left right">
+                <label asp-for="PrimaryGuardian.HomeAddress.AddressLine1" class=""></label>
+                <input asp-for="PrimaryGuardian.HomeAddress.AddressLine1" data-placeholder="" />
+                <span asp-validation-for="PrimaryGuardian.HomeAddress.AddressLine1" class="text-danger"></span>
+            </div>
+            <div class="float-container top left right">
+                <label asp-for="PrimaryGuardian.HomeAddress.AddressLine2" class=""></label>
+                <input asp-for="PrimaryGuardian.HomeAddress.AddressLine2" data-placeholder="" />
+                <span asp-validation-for="PrimaryGuardian.HomeAddress.AddressLine2" class="text-danger"></span>
+            </div>
+
+            <div class="float-container top left right">
+                <label asp-for="PrimaryGuardian.HomeAddress.City" class=""></label>
+                <input asp-for="PrimaryGuardian.HomeAddress.City" data-placeholder="" />
+                <span asp-validation-for="PrimaryGuardian.HomeAddress.City" class="text-danger"></span>
+            </div>
+            <div class="side-by-side">
+                <div class="float-container top bottom left  next-to">
+                    <label asp-for="PrimaryGuardian.HomeAddress.State" class=""></label>
+                    <input asp-for="PrimaryGuardian.HomeAddress.State" data-placeholder="" />
+                    <span asp-validation-for="PrimaryGuardian.HomeAddress.State" class="text-danger"></span>
+                </div>
+                <div class="float-container top bottom left right next-to">
+                    <label asp-for="PrimaryGuardian.HomeAddress.PostalCode" class=""></label>
+                    <input asp-for="PrimaryGuardian.HomeAddress.PostalCode" data-placeholder="" />
+                    <span asp-validation-for="PrimaryGuardian.HomeAddress.PostalCode" class="text-danger"></span>
+                </div>
+            </div>
+            <h5 class="coral">Employer Info</h5>
+            <div id="primWorkPh">
+                @if (Model.PrimaryGuardian.WorkPhone != null )
+                {
+                    <input type="hidden" asp-for="PrimaryGuardian.WorkPhone.PhoneId" />
+                    <input type="hidden" asp-for="PrimaryGuardian.WorkPhone.PhoneType" />
+                    <div class="float-container top bottom left right">
+                        <label asp-for="PrimaryGuardian.WorkPhone.PhoneNumber" class=""></label>
+                        <input asp-for="PrimaryGuardian.WorkPhone.PhoneNumber" class="phone" />
+                        <span asp-validation-for="PrimaryGuardian.WorkPhone.PhoneNumber" class="text-danger"></span>
+                    </div>
+                }
+            </div>
+
+            <div style="display: @(Model.PrimaryGuardian.WorkPhone == null || Model.PrimaryGuardian.WorkPhoneId == Guid.Empty ? "" : "none"); margin-top: 10px; margin-right: 5px; float: left; clear: right;">
+                <button type="button" data-person="primary" class="btn btn-blue btn-shadow create-phone"><i class="fa fa-plus"></i> Add Work Phone</button>
+            </div>
+            <div id="primWorkAddr">
+                @if (Model.PrimaryGuardian.WorkAddress != null)
+                {
+                    <input type="hidden" asp-for="PrimaryGuardian.WorkAddress.AddressId" />
+                    <input type="hidden" asp-for="PrimaryGuardian.WorkAddress.AddressType" />
+                    <div class="float-container @(Model.PrimaryGuardian.WorkAddress == null ? "top" : "" ) left right">
+                        <label asp-for="PrimaryGuardian.WorkAddress.AddressLine1" class=""></label>
+                        <input asp-for="PrimaryGuardian.WorkAddress.AddressLine1" data-placeholder="" />
+                        <span asp-validation-for="PrimaryGuardian.WorkAddress.AddressLine1" class="text-danger"></span>
+                    </div>
+                    <div class="float-container top left right">
+                        <label asp-for="PrimaryGuardian.WorkAddress.AddressLine2" class=""></label>
+                        <input asp-for="PrimaryGuardian.WorkAddress.AddressLine2" data-placeholder="" />
+                        <span asp-validation-for="PrimaryGuardian.WorkAddress.AddressLine2" class="text-danger"></span>
+                    </div>
+
+                    <div class="float-container top left right">
+                        <label asp-for="PrimaryGuardian.WorkAddress.City" class=""></label>
+                        <input asp-for="PrimaryGuardian.WorkAddress.City" data-placeholder="" />
+                        <span asp-validation-for="PrimaryGuardian.WorkAddress.City" class="text-danger"></span>
+                    </div>
+                    <div class="side-by-side">
+                        <div class="float-container top bottom left  next-to">
+                            <label asp-for="PrimaryGuardian.WorkAddress.State" class=""></label>
+                            <input asp-for="PrimaryGuardian.WorkAddress.State" data-placeholder="" />
+                            <span asp-validation-for="PrimaryGuardian.WorkAddress.State" class="text-danger"></span>
+                        </div>
+                        <div class="float-container top bottom left right next-to">
+                            <label asp-for="PrimaryGuardian.WorkAddress.PostalCode" class=""></label>
+                            <input asp-for="PrimaryGuardian.WorkAddress.PostalCode" data-placeholder="" />
+                            <span asp-validation-for="PrimaryGuardian.WorkAddress.PostalCode" class="text-danger"></span>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div style="display: @(Model.PrimaryGuardian.WorkAddress == null || Model.PrimaryGuardian.WorkAddressId  == Guid.Empty ? "" : "none"); margin-top: 10px; float: left;">
+                <button type="button" data-person="primary" class="btn btn-blue btn-shadow create-address"><i class="fa fa-plus"></i> Add Work Address</button>
+            </div>
+        </div>
+        <div class="col-md-6 data-table">
+            <div class="checkboxes">
+                <input type="checkbox" asp-for="SecondaryGuardian.IsPrimaryGuardian" />
+                <label for="PrimaryGuardian.IsGuardian" class="chkbox">Primary Guardian</label>
+            </div>
+            @if (Model.SecondaryGuardian != null)
+            {
+                <input type="hidden" asp-for="SecondaryGuardian.GuardianId" />
+            }
+            <input type="hidden" asp-for="SecondaryGuardian.FamilyId" />
+            <div class="side-by-side">
+                <div class="top left right float-container next-to">
+                    <label asp-for="SecondaryGuardian.FirstName" class=""></label>
+                    <input asp-for="SecondaryGuardian.FirstName" data-placeholder="" />
+                    <span asp-validation-for="SecondaryGuardian.FirstName" class="text-danger"></span>
+                </div>
+                <div class="top right float-container next-to">
+                    <label asp-for="SecondaryGuardian.LastName" class=""></label>
+                    <input asp-for="SecondaryGuardian.LastName" data-placeholder="" />
+                    <span asp-validation-for="SecondaryGuardian.LastName" class="text-danger"></span>
+                </div>
+            </div>
+            @if (Model.SecondaryGuardian.MobilePhone != null && Model.SecondaryGuardian.MobilePhone.PhoneId != Guid.Empty)
+            {
+                <input type="hidden" asp-for="SecondaryGuardian.MobilePhone.PhoneId" />
+                <input type="hidden" asp-for="SecondaryGuardian.MobilePhone.PhoneType" />
+            }
+            else
+            {
+                <input type="hidden" asp-for="SecondaryGuardian.MobilePhone.PhoneType" value="Mobile" />
+            }
+
+            <div class="side-by-side">
+                <div class="float-container top left right next-to">
+                    <label asp-for="SecondaryGuardian.DOB"></label>
+                    <input asp-for="SecondaryGuardian.DOB" type="text" class="date-mask" data-placeholder="" />
+                    <span asp-validation-for="SecondaryGuardian.DOB" class="text-danger"></span>
+                </div>
+                <div class="float-container top right next-to">
+                    <label asp-for="SecondaryGuardian.MobilePhone.PhoneNumber" class=""></label>
+                    <input asp-for="SecondaryGuardian.MobilePhone.PhoneNumber" class="phone" data-placeholder="" />
+                    <span asp-validation-for="SecondaryGuardian.MobilePhone.PhoneNumber" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="float-container top left right">
+                <label asp-for="SecondaryGuardian.Email" class=""></label>
+                <input asp-for="SecondaryGuardian.Email" data-placeholder="" />
+                <span asp-validation-for="SecondaryGuardian.Email" class="text-danger"></span>
+            </div>
+
+            @if (Model.SecondaryGuardian.HomeAddress != null && Model.SecondaryGuardian.HomeAddress.AddressId  != Guid.Empty)
+            {
+                <input type="hidden" asp-for="SecondaryGuardian.HomeAddress.AddressId" />
+                <input type="hidden" asp-for="SecondaryGuardian.HomeAddress.AddressType" />
+            }
+            else
+            {
+                <input type="hidden" asp-for="SecondaryGuardian.HomeAddress.AddressType" value="Home" />
+            }
+
+            <div class="float-container top left right">
+                <label asp-for="SecondaryGuardian.HomeAddress.AddressLine1" class=""></label>
+                <input asp-for="SecondaryGuardian.HomeAddress.AddressLine1" data-placeholder="" />
+                <span asp-validation-for="SecondaryGuardian.HomeAddress.AddressLine1" class="text-danger"></span>
+            </div>
+            <div class="float-container top left right">
+                <label asp-for="SecondaryGuardian.HomeAddress.AddressLine2" class=""></label>
+                <input asp-for="SecondaryGuardian.HomeAddress.AddressLine2" data-placeholder="" />
+                <span asp-validation-for="SecondaryGuardian.HomeAddress.AddressLine2" class="text-danger"></span>
+            </div>
+
+            <div class="float-container top left right">
+                <label asp-for="SecondaryGuardian.HomeAddress.City" class=""></label>
+                <input asp-for="SecondaryGuardian.HomeAddress.City" data-placeholder="" />
+                <span asp-validation-for="SecondaryGuardian.HomeAddress.City" class="text-danger"></span>
+            </div>
+            <div class="side-by-side">
+                <div class="float-container top bottom left  next-to">
+                    <label asp-for="SecondaryGuardian.HomeAddress.State" class=""></label>
+                    <input asp-for="SecondaryGuardian.HomeAddress.State" data-placeholder="" />
+                    <span asp-validation-for="SecondaryGuardian.HomeAddress.State" class="text-danger"></span>
+                </div>
+                <div class="float-container top bottom left right next-to">
+                    <label asp-for="SecondaryGuardian.HomeAddress.PostalCode" class=""></label>
+                    <input asp-for="SecondaryGuardian.HomeAddress.PostalCode" data-placeholder="" />
+                    <span asp-validation-for="SecondaryGuardian.HomeAddress.PostalCode" class="text-danger"></span>
+                </div>
+            </div>
+            <h5 class="coral">Employer Info</h5>
+            <div id="secWorkPh">
+                @if (Model.SecondaryGuardian.MobilePhone != null && Model.SecondaryGuardian.MobilePhoneId != Guid.Empty)
+                {
+                    <input type="hidden" asp-for="SecondaryGuardian.WorkPhone.PhoneId" />
+                    <input type="hidden" asp-for="SecondaryGuardian.WorkPhone.PhoneType" />
+                    <div class="float-container top bottom left right">
+                        <label asp-for="SecondaryGuardian.WorkPhone.PhoneNumber" class=""></label>
+                        <input asp-for="SecondaryGuardian.WorkPhone.PhoneNumber" class="phone" data-placeholder="" />
+                        <span asp-validation-for="SecondaryGuardian.WorkPhone.PhoneNumber" class="text-danger"></span>
+                    </div>
+                }
+            </div>
+
+            <div style="display: @(Model.SecondaryGuardian.WorkPhone == null || Model.SecondaryGuardian.WorkPhoneId == Guid.Empty ? "" : "none"); margin-top: 10px; margin-right: 5px; float: left; clear: right;">
+                <button type="button" data-person="secondary" class="btn btn-blue btn-shadow create-phone"><i class="fa fa-plus"></i> Add Work Phone</button>
+            </div>
+            <div id="secWorkAddr">
+                @if (Model.SecondaryGuardian.WorkAddress != null && Model.SecondaryGuardian.WorkAddressId != Guid.Empty)
+                {
+                    <input type="hidden" asp-for="SecondaryGuardian.WorkAddress.AddressId" />
+                    <input type="hidden" asp-for="SecondaryGuardian.WorkAddress.AddressType" />
+                    <div class="float-container  @(Model.SecondaryGuardian.WorkAddress == null ? "top" : "" ) left right">
+                        <label asp-for="SecondaryGuardian.WorkAddress.AddressLine1" class=""></label>
+                        <input asp-for="SecondaryGuardian.WorkAddress.AddressLine1" data-placeholder="" />
+                        <span asp-validation-for="SecondaryGuardian.WorkAddress.AddressLine1" class="text-danger"></span>
+                    </div>
+                    <div class="float-container top left right">
+                        <label asp-for="SecondaryGuardian.WorkAddress.AddressLine2" class=""></label>
+                        <input asp-for="SecondaryGuardian.WorkAddress.AddressLine2" data-placeholder="" />
+                        <span asp-validation-for="SecondaryGuardian.WorkAddress.AddressLine2" class="text-danger"></span>
+                    </div>
+
+                    <div class="float-container top left right">
+                        <label asp-for="SecondaryGuardian.WorkAddress.City" class=""></label>
+                        <input asp-for="SecondaryGuardian.WorkAddress.City" data-placeholder="" />
+                        <span asp-validation-for="SecondaryGuardian.WorkAddress.City" class="text-danger"></span>
+                    </div>
+                    <div class="side-by-side">
+                        <div class="float-container top bottom left  next-to">
+                            <label asp-for="SecondaryGuardian.WorkAddress.State" class=""></label>
+                            <input asp-for="SecondaryGuardian.WorkAddress.State" data-placeholder="" />
+                            <span asp-validation-for="SecondaryGuardian.WorkAddress.State" class="text-danger"></span>
+                        </div>
+                        <div class="float-container top bottom left right next-to">
+                            <label asp-for="SecondaryGuardian.WorkAddress.PostalCode" class=""></label>
+                            <input asp-for="SecondaryGuardian.WorkAddress.PostalCode" data-placeholder="" />
+                            <span asp-validation-for="SecondaryGuardian.WorkAddress.PostalCode" class="text-danger"></span>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div style="display: @(Model.SecondaryGuardian.WorkAddress == null || Model.SecondaryGuardian.WorkAddressId == Guid.Empty ? "" : "none"); margin-top: 10px; float: left;">
+                <button type="button" data-person="secondary" class="btn btn-blue btn-shadow create-address"><i class="fa fa-plus"></i> Add Work Address</button>
+            </div>
+        </div>
+        @*<div style="margin: 10px auto; text-align: right; float: right; clear: both;">
+            <div style="padding-right: 10px;">
+                <button type="button" id="guardian-save" class="save-child btn btn-coral btn-shadow save-record">Save</button>
+            </div>
+        </div>*@
+    </div>

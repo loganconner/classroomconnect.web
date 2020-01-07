@@ -1,0 +1,48 @@
+﻿@model ClassroomVM
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Student Name
+            </th>
+            <th>
+                DOB
+            </th>
+            <th>
+                Enrollment Date
+            </th>
+            <th>
+                Primary Guardian
+            </th>
+            <th>
+                Secondary Guardian
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Students)
+        {
+            var childId = item.ChildId.ToString();
+
+        <tr class="edit-row cursor" onclick="getStudent('@childId')">
+            <td>
+                @Html.DisplayFor(modelItem => item.FullName)
+            </td>
+            <td class="date-mask">
+                @Html.DisplayFor(modelItem => item.DOB)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EnrollmentDate)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.PrimaryGuardianName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SecondaryGuardianName)
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>

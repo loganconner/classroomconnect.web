@@ -1,0 +1,19 @@
+﻿@model EnrollmentRecordVM
+
+    <div id="enrollment-allery">
+        <div class="col-md-6 center-block data-table">
+
+            @if (Model.Child.Allergies != null && Model.Child.Allergies.Count() > 0)
+            {
+            <div id="allergyList" class="list-group">
+
+                @foreach (var a in Model.Child.Allergies)
+                {
+                    <button type="button" class="allergy-btn btn-coral btn-shadow" value="@a.AllergyId">@a.Name <i class="far fa-times-circle fa-lg  pull-right " style="vertical-align: middle;"></i></button> 
+                }
+
+            </div>
+            }
+        </div>
+
+    </div>

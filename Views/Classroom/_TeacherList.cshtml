@@ -1,0 +1,21 @@
+﻿@model List<ClassroomVM>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Teacher Name
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr class="edit-row cursor" onclick="location.href='@Url.Action("Classroom", "Classroom", new { classroomId = item.ClassroomId })'">
+                <td>
+                    @Html.DisplayFor(modelItem => item.TeacherName)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

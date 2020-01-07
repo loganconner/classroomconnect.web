@@ -1,0 +1,25 @@
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "library": "cropperjs@1.5.6",
+      "destination": "wwwroot/lib/cropperjs/"
+    },
+    {
+      "provider": "filesystem",
+      "library": "wwwroot/css/",
+      "destination": "wwwroot/lib/css/",
+      "files": [
+        "MultiStep-theme.scss",
+        "_variables.scss",
+        "MultiStep.scss"
+      ]
+    },
+    {
+      "provider": "filesystem",
+      "library": "wwwroot/js/",
+      "destination": "wwwroot/lib/js/"
+    }
+  ]
+}

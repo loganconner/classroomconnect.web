@@ -1,0 +1,95 @@
+﻿@model EnrollmentRecordVM
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+
+
+    <div id="enrollment-tabs" >
+        @*<ul>
+            <li><a href="#enrollment-child">Student</a></li>
+            <li><a href="#enrollment-guardian">Guardians</a></li>
+            <li><a href="#enrollment-contact">Contacts</a></li>
+            <li id="ui-tab-dialog-close"></li>
+        </ul>*@ 
+
+            <partial name="_Enrollment_Child" />
+            <partial name="_Enrollment_Guardian" />
+            <partial name="_Enrollment_Contact" />
+            @*<partial name="_Enrollment_Allergy" />*@
+            
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $('.ui-dialog-title').html($("#Child_FirstName").val() + " " +  $("#Child_MiddleName").val() + " " +  $("#Child_LastName").val());
+
+        $('.phone').mask('(000) 000-0000', { 'translation': { 0: { pattern: /[0-9*]/ } } });
+        
+    });
+    $(document.body).on('click', '.edit-btn', function () {
+            var current = $(this);
+            $(current).fadeOut(500);           
+            setTimeout(function () { $(current).siblings('.save-record').fadeIn(500); }, 500);
+        });
+
+
+        @*$(document.body).on('click', '.save-child', function () {
+            $('form').children().find('.date-mask').unmask();
+            $('form').children().find('.phone').unmask();
+            if ($('#primWorkPh').is(':hidden')) {
+                $('#primWorkPh').html('');
+            }
+            if ($('#secWorkPh').is(':hidden')) {
+                $('#secWorkPh').html('');
+            }
+            if ($('#primWorkAddr').is(':hidden')) {
+                console.log('here');
+                $('#primWorkAddr').html('');
+            }
+            if ($('#secWorkAddr').is(':hidden')) {
+                $('#secWorkAddr').html('');
+            }
+            var form = $('form').serialize();
+            $.ajax({
+                type: "POST",
+                dataType: 'json',
+                contentType: 'application/x-www-form-urlencoded; charset=utf-8',
+                url: "@Url.Action("UpdateEnrollment","Classroom")",
+                data: form,
+                success: function (result) {
+                    var ajaxreturn = result;
+                    $('#ui-id-6').html(result.ReturnObject.Child.FirstName + " " + result.ReturnObject.Child.MiddleName + " " + result.ReturnObject.Child.LastName);
+                    ShowMessage(ajaxreturn, true);
+                    return ajaxreturn.Message; 
+                }
+            });
+        });*@
+
+        $('.create-phone').on('click', function () {
+            
+            if ($(this).data('person') == 'primary') {
+                $(this).parent().hide();
+                $('#primWorkPh').html('<input type="hidden" name="PrimaryGuardian.WorkPhone.PhoneType" value="Work" /><div class="float-container top bottom left right"><label name="PrimaryGuardian.WorkPhone.PhoneNum" class=""></label><input name="PrimaryGuardian.WorkPhone.PhoneNum" class="phone" data-placeholder="" /><span asp-validation-for="PrimaryGuardian.WorkPhone.PhoneNum" class="text-danger"></span></div>');                          
+            } else if ($(this).data('person') == 'secondary') {
+                $(this).parent().hide();
+                $('#secWorkPh').html('<input type="hidden" name="SecondaryGuardian.WorkPhone.PhoneType" value="Work" /><div class="float-container top bottom left right"><label name="SecondaryGuardian.WorkPhone.PhoneNum" class=""></label><input name="SecondaryGuardian.WorkPhone.PhoneNum" class="phone" data-placeholder="" /><span asp-validation-for="SecondaryGuardian.WorkPhone.PhoneNum" class="text-danger"></span></div>');
+            }
+        });
+
+        $('.create-address').on('click', function () {
+            if ($(this).data('person') == 'primary') {
+                $(this).parent().hide();
+                $('#primWorkAddr').html('<input type="hidden" name="PrimaryGuardian.WorkAddress.AdrType" value="Work" /><div class="float-container top left right"><label asp-for="PrimaryGuardian.WorkAddress.Adr1" class=""></label><input asp-for="PrimaryGuardian.WorkAddress.Adr1" data-placeholder="" /><span asp-validation-for="PrimaryGuardian.WorkAddress.Adr1" class="text-danger"></span></div><div class="float-container top left right"><label asp-for="PrimaryGuardian.WorkAddress.Adr2" class=""></label><input asp-for="PrimaryGuardian.WorkAddress.Adr2" data-placeholder="" /><span asp-validation-for="PrimaryGuardian.WorkAddress.Adr2" class="text-danger"></span></div><div class="float-container top left right"><label asp-for="PrimaryGuardian.WorkAddress.City" class=""></label><input asp-for="PrimaryGuardian.WorkAddress.City" data-placeholder="" /><span asp-validation-for="PrimaryGuardian.WorkAddress.City" class="text-danger"></span></div><div class="side-by-side"><div class="float-container top bottom left  next-to"><label asp-for="PrimaryGuardian.WorkAddress.State" class=""></label><input asp-for="PrimaryGuardian.WorkAddress.State" data-placeholder="" /><span asp-validation-for="PrimaryGuardian.WorkAddress.State" class="text-danger"></span></div><div class="float-container top bottom left right next-to"><label asp-for="PrimaryGuardian.WorkAddress.PostalCode" class=""></label><input asp-for="PrimaryGuardian.WorkAddress.PostalCode" data-placeholder="" /><span asp-validation-for="PrimaryGuardian.WorkAddress.PostalCode" class="text-danger"></span></div></div>');
+                $('#PrimaryGuardian_WorkPhone_PhoneNum').parent().removeClass('bottom');
+            } else if ($(this).data('person') == 'secondary') {
+                $(this).parent().hide();
+                $('#secWorkAddr').html('<input type="hidden" name="SecondaryGuardian.WorkAddress.AdrType" value="Work" /><div class="float-container top left right"><label asp-for="SecondaryGuardian.WorkAddress.Adr1" class=""></label><input asp-for="SecondaryGuardian.WorkAddress.Adr1" data-placeholder="" /><span asp-validation-for="SecondaryGuardian.WorkAddress.Adr1" class="text-danger"></span></div><div class="float-container top left right"><label asp-for="SecondaryGuardian.WorkAddress.Adr2" class=""></label><input asp-for="SecondaryGuardian.WorkAddress.Adr2" data-placeholder="" /><span asp-validation-for="SecondaryGuardian.WorkAddress.Adr2" class="text-danger"></span></div><div class="float-container top left right"><label asp-for="SecondaryGuardian.WorkAddress.City" class=""></label><input asp-for="SecondaryGuardian.WorkAddress.City" data-placeholder="" /><span asp-validation-for="SecondaryGuardian.WorkAddress.City" class="text-danger"></span></div><div class="side-by-side"><div class="float-container top bottom left  next-to"><label asp-for="SecondaryGuardian.WorkAddress.State" class=""></label><input asp-for="SecondaryGuardian.WorkAddress.State" data-placeholder="" /><span asp-validation-for="SecondaryGuardian.WorkAddress.State" class="text-danger"></span></div><div class="float-container top bottom left right next-to"><label asp-for="SecondaryGuardian.WorkAddress.PostalCode" class=""></label><input asp-for="SecondaryGuardian.WorkAddress.PostalCode" data-placeholder="" /><span asp-validation-for="SecondaryGuardian.WorkAddress.PostalCode" class="text-danger"></span></div></div>');
+                $('#SecondaryGuardian_WorkPhone_PhoneNum').parent().removeClass('bottom');
+            }
+            
+        });
+</script>
+
+

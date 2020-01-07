@@ -1,0 +1,74 @@
+﻿@model EnrollmentRecordVM
+
+    <div id="enrollment-contact" class="enrollment-section">
+        <div class="section-head">
+            <h4 class="coral fancy"><span>Contacts</span></h4><button type="button" id="contact-update" class="save-child btn btn-coral btn-shadow save-record" style="display: none">Save</button>
+        </div>
+        <div class="contact">
+            @if (Model.ContactList != null && Model.ContactList.Count() > 0)
+            {
+                for (var i = 0; i < Model.ContactList.Count; i++)
+                {
+            <div class="col-md-6 data-table">
+                <input type="hidden" asp-for="@Model.ContactList[i].ContactId" />
+                <input type="hidden" asp-for="@Model.ContactList[i].FamilyId" />
+                <div class="checkboxes">
+                    <input type="checkbox" asp-for="@Model.ContactList[i].ApprovedPickup" />
+                    <label asp-for="@Model.ContactList[i].ApprovedPickup" class="chkbox"></label>
+                    <input asp-for="@Model.ContactList[i].ApprovedByGuardians" />
+                    <label asp-for="@Model.ContactList[i].ApprovedByGuardians" class="chkbox"></label>
+                </div>
+                <div class="side-by-side">
+                    <div class="float-container top left right next-to">
+                        <label asp-for="@Model.ContactList[i].FirstName" class=""></label>
+                        <input asp-for="@Model.ContactList[i].FirstName" data-placeholder="" />
+                        <span asp-validation-for="@Model.ContactList[i].FirstName" class="text-danger"></span>
+                    </div>
+                    <div class="float-container top right next-to">
+                        <label asp-for="@Model.ContactList[i].LastName" class=""></label>
+                        <input asp-for="@Model.ContactList[i].LastName" data-placeholder="" />
+                        <span asp-validation-for="@Model.ContactList[i].LastName" class="text-danger"></span>
+                    </div>
+                </div>
+                <input type="hidden" asp-for="@Model.ContactList[i].Phone.PhoneId" />
+                <input type="hidden" asp-for="@Model.ContactList[i].Phone.PhoneType" />
+                <div class="float-container top left right">
+                    <label asp-for="@Model.ContactList[i].Phone.PhoneNumber" class=""></label>
+                    <input asp-for="@Model.ContactList[i].Phone.PhoneNumber" class="phone" data-placeholder="" />
+                    <span asp-validation-for="@Model.ContactList[i].Phone.PhoneNumber" class="text-danger"></span>
+                </div>
+
+                <input type="hidden" asp-for="@Model.ContactList[i].Address.AddressId" />
+                <div class="float-container top left right">
+                    <label asp-for="@Model.ContactList[i].Address.AddressLine1" class=""></label>
+                    <input asp-for="@Model.ContactList[i].Address.AddressLine1" data-placeholder="" />
+                    <span asp-validation-for="@Model.ContactList[i].Address.AddressLine1" class="text-danger"></span>
+                </div>
+                <div class="float-container top left right">
+                    <label asp-for="@Model.ContactList[i].Address.AddressLine2" class=""></label>
+                    <input asp-for="@Model.ContactList[i].Address.AddressLine2" data-placeholder="" />
+                    <span asp-validation-for="@Model.ContactList[i].Address.AddressLine2" class="text-danger"></span>
+                </div>
+                <div class="float-container top left right">
+                    <label asp-for="@Model.ContactList[i].Address.City" class=""></label>
+                    <input asp-for="@Model.ContactList[i].Address.City" data-placeholder="" />
+                    <span asp-validation-for="@Model.ContactList[i].Address.City" class="text-danger"></span>
+                </div>
+                <div class="side-by-side">
+                    <div class="float-container top bottom left next-to">
+                        <label asp-for="@Model.ContactList[i].Address.State" class=""></label>
+                        <input asp-for="@Model.ContactList[i].Address.State" data-placeholder="" />
+                        <span asp-validation-for="@Model.ContactList[i].Address.State" class="text-danger"></span>
+                    </div>
+                    <div class="float-container top bottom left right next-to">
+                        <label asp-for="@Model.ContactList[i].Address.PostalCode" class=""></label>
+                        <input asp-for="@Model.ContactList[i].Address.PostalCode" data-placeholder="" />
+                        <span asp-validation-for="@Model.ContactList[i].Address.PostalCode" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+                }
+
+            }
+        </div>
+    </div>
